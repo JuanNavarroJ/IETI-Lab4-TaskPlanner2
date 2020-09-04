@@ -6,21 +6,14 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
@@ -31,9 +24,15 @@ import CardContent from '@material-ui/core/CardContent';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { green,red,yellow} from '@material-ui/core/colors';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 
 const drawerWidth = 240;
 
@@ -131,7 +130,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: yellow[500],
   },
   add: {
-    padding: "0 0 0 95%",
+    position: 'relative',
+    bottom: '5%',
+    left: '47%',
   },
   large: {
     width: theme.spacing(7),
@@ -140,9 +141,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const [tasks, setTasks] = React.useState([{description:"Implement Login View",status:"In Progress",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}},
+                {description:"Implement Login Controller",status:"Ready",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}},
+                {description:"Facebook Integration",status:"Completed",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}}]);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [openForm, setOpenForm] = React.useState(false);
+  const [state, setState] = React.useState('');
   const colorRojo = red[900];
 
   const handleDrawerOpen = () => {
@@ -151,6 +157,27 @@ export default function PersistentDrawerLeft() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };  
+
+  const handleClickOpen = () => {
+    setOpenForm(true);
+  };
+
+  const handleClose = () => {
+    setOpenForm(false);
+  };
+
+  const handleChangeState = (event) => {
+    setState(event.target.value);
+  };
+
+  const handleChangeTasks = (newTask) => {
+    setTasks(tasks.concat(newTask));
+  };
+
+  const handleAdd = () => {
+    handleChangeTasks({description:document.getElementById("desc").value,status:state,dueDate:document.getElementById("date").value,responsible:{name:document.getElementById("resp").value}});
+    setOpenForm(false);
   };
 
   return (
@@ -230,85 +257,109 @@ export default function PersistentDrawerLeft() {
       >
         <div className={classes.drawerHeader} />
             <Container maxWidth="lg" className={classes.containerPaper}>
-                <Card className={classes.root1} variant="outlined">
-                    <CardContent>
-                        <React.Fragment>
-                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                                Implement Login View
-                            </Typography>
-                            <div>
-                            <Typography component="p" variant="h5">
-                                In Progress <AssignmentIcon className={classes.red}/>
-                            </Typography>
-                            
-                            </div>
-                            <Typography color="textSecondary" className={classes.depositContext}>
-                                27/08/2020
-                            </Typography>
-                            <Typography component="p" variant="h9" color="primary">
-                                Juan Navarro
-                            </Typography>
-                        </React.Fragment>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small">Learn More</Button>
-                    </CardActions>
-                </Card>
-                <Card className={classes.root1} variant="outlined">
-                    <CardContent>
-                        <React.Fragment>
-                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                                Implement Login Controller
-                            </Typography>
-                            <div>
-                            <Typography component="p" variant="h5">
-                                Ready <HourglassEmptyIcon  className={classes.yellow}/>
-                            </Typography>
-                            
-                            </div>
-                            <Typography color="textSecondary" className={classes.depositContext}>
-                                27/08/2020
-                            </Typography>
-                            <Typography component="p" variant="h9" color="primary">
-                                Juan Navarro
-                            </Typography>
-                        </React.Fragment>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small">Learn More</Button>
-                    </CardActions>
-                </Card>
-                <Card className={classes.root1} variant="outlined">
-                    <CardContent>
-                        <React.Fragment>
-                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                                Facebook Integration
-                            </Typography>
-                            <div>
-                            <Typography component="p" variant="h5">
-                                Completed <CheckCircleOutlineIcon className={classes.green}/>
-                            </Typography>
-                            
-                            </div>
-                            <Typography color="textSecondary" className={classes.depositContext}>
-                                27/08/2020
-                            </Typography>
-                            <Typography component="p" variant="h9" color="primary">
-                                Juan Navarro
-                            </Typography>
-                        </React.Fragment>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small">Learn More</Button>
-                    </CardActions>
-                </Card>
-            </Container>
-            <Button className={classes.add}
+            <Grid container spacing={2} className={classes.actionSpacer}>
+              {tasks.map(task => (
+                  <Grid key={task} xs={12} sm={6} md={4} lg={5} xl={2} item>
+                    <Card className={classes.root1} variant="outlined">
+                        <CardContent>
+                            <React.Fragment>
+                                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                    {task.description}
+                                </Typography>
+                                <div>
+                                <Typography component="p" variant="h5">
+                                    {task.status} <AssignmentIcon className={classes.red}/>
+                                </Typography>
+                                
+                                </div>
+                                <Typography color="textSecondary" className={classes.depositContext}>
+                                    {task.dueDate}
+                                </Typography>
+                                <Typography component="p" variant="h9" color="primary">
+                                    {task.responsible.name}
+                                </Typography>
+                            </React.Fragment>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small">Learn More</Button>
+                        </CardActions>
+                    </Card>
+                  </Grid>
+              ))}
+            </Grid>
+            <div>
+              <Button 
+                className={classes.add}
                 color="primary"
-                
-                startIcon={<AddCircleIcon style={{ fontSize: 70 }}/>}
-            >
-            </Button>
+                onClick={handleClickOpen}
+                startIcon={<AddCircleIcon style={{ fontSize: 70 }}/>}>
+              </Button>
+              <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">New Task</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Complete the data of the new task.
+                  </DialogContentText>
+                    <TextField
+                      required
+                      autoFocus
+                      margin="dense"
+                      id="desc"
+                      label="Description"
+                      variant="outlined"
+                      type="text"
+                      fullWidth
+                    />
+                    <InputLabel id="demo-mutiple-name-label">State</InputLabel>
+                    <Select
+                      required
+                      id="stateForm"
+                      onChange={handleChangeState}
+                      labelId="demo-mutiple-name-label"
+                      margin="dense"
+                      displayEmpty
+                      variant="outlined"
+                      fullWidth
+                    >
+                      <MenuItem value="In Progress">In Progress</MenuItem>
+                      <MenuItem value="Ready">Ready</MenuItem>
+                      <MenuItem value="Completed">Completed</MenuItem>
+                    </Select>
+                    <TextField
+                      required
+                      autoFocus
+                      margin="dense"
+                      id="date"
+                      label="Date"
+                      type="date"
+                      defaultValue="2020-09-04"
+                      fullWidth
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                    <TextField
+                      required
+                      autoFocus
+                      margin="dense"
+                      id="resp"
+                      label="Responsible"
+                      variant="outlined"
+                      type="text"
+                      fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleAdd} color="primary">
+                    Add
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+            </Container>            
       </main>
     </div>
   );
