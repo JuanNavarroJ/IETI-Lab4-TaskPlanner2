@@ -17,7 +17,6 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
-import PostAddIcon from '@material-ui/icons/PostAdd';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,6 +32,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import UserProfile from './UserProfile';
 
 const drawerWidth = 240;
 
@@ -140,7 +140,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PersistentDrawerLeft() {
+localStorage.setItem("name", "Juan David");
+localStorage.setItem("email", "juan.navarro@mail.escuelaing.edu.co");
+
+export default function Dashboard() {
   const [tasks, setTasks] = React.useState([{description:"Implement Login View",status:"In Progress",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}},
                 {description:"Implement Login Controller",status:"Ready",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}},
                 {description:"Facebook Integration",status:"Completed",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}}]);
@@ -149,8 +152,13 @@ export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(false);
   const [state, setState] = React.useState('');
-  const colorRojo = red[900];
+  const [user, setUser] = React.useState({name:"Juan David",email:"Juan.navarro@mail.escuelaing.edu.co"}); 
 
+  const handleChangeUser = (algo) => {
+    alert(algo.name + "   " + algo.email);
+    alert(localStorage.getItem("name"));
+    setUser(algo);
+  };
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -225,14 +233,12 @@ export default function PersistentDrawerLeft() {
             <br/>
             <Avatar src="/static/images/avatar/1.jpg"/>
                 <Typography variant="overline" display="block" color="primary" gutterBottom>
-                    Juan David           
+                    {user.name}          
                 </Typography>
                 <Typography variant="caption" display="block" color="primary" gutterBottom>
-                    Juan.navarro@mail.escuelaing.edu.co              
+                    {user.email}           
                 </Typography>
-                <Button
-                    startIcon={<PostAddIcon /> }>
-                </Button>
+                <UserProfile fun={handleChangeUser}/>                
             </Card>
         </div>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
@@ -281,7 +287,7 @@ export default function PersistentDrawerLeft() {
                             </React.Fragment>
                         </CardContent>
                         <CardActions>
-                            <Button size="small">Learn More</Button>
+                            <Button size="small">Leer más</Button>
                         </CardActions>
                     </Card>
                   </Grid>
