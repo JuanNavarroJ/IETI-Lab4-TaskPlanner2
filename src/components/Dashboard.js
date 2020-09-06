@@ -20,19 +20,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { green,red,yellow} from '@material-ui/core/colors';
+import {red} from '@material-ui/core/colors';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import UserProfile from './UserProfile';
+import NewTask from './NewTask';
 
 const drawerWidth = 240;
 
@@ -91,52 +82,15 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
   depositContext: {
     flex: 1,
   },
   root1: {
     minWidth: 275,
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  green: {
-    color: '#fff',
-    backgroundColor: green[500],
-  },
   red: {
     color: '#fff',
     backgroundColor: red[500],
-  },
-  yellow: {
-    color: '#fff',
-    backgroundColor: yellow[500],
-  },
-  add: {
-    position: 'relative',
-    bottom: '5%',
-    left: '47%',
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
   },
 }));
 
@@ -150,13 +104,9 @@ export default function Dashboard() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [openForm, setOpenForm] = React.useState(false);
-  const [state, setState] = React.useState('');
   const [user, setUser] = React.useState({name:"Juan David",email:"Juan.navarro@mail.escuelaing.edu.co"}); 
 
   const handleChangeUser = (algo) => {
-    alert(algo.name + "   " + algo.email);
-    alert(localStorage.getItem("name"));
     setUser(algo);
   };
   const handleDrawerOpen = () => {
@@ -167,25 +117,8 @@ export default function Dashboard() {
     setOpen(false);
   };  
 
-  const handleClickOpen = () => {
-    setOpenForm(true);
-  };
-
-  const handleClose = () => {
-    setOpenForm(false);
-  };
-
-  const handleChangeState = (event) => {
-    setState(event.target.value);
-  };
-
   const handleChangeTasks = (newTask) => {
     setTasks(tasks.concat(newTask));
-  };
-
-  const handleAdd = () => {
-    handleChangeTasks({description:document.getElementById("desc").value,status:state,dueDate:document.getElementById("date").value,responsible:{name:document.getElementById("resp").value}});
-    setOpenForm(false);
   };
 
   return (
@@ -293,78 +226,7 @@ export default function Dashboard() {
                   </Grid>
               ))}
             </Grid>
-            <div>
-              <Button 
-                className={classes.add}
-                color="primary"
-                onClick={handleClickOpen}
-                startIcon={<AddCircleIcon style={{ fontSize: 70 }}/>}>
-              </Button>
-              <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">New Task</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Complete the data of the new task.
-                  </DialogContentText>
-                    <TextField
-                      required
-                      autoFocus
-                      margin="dense"
-                      id="desc"
-                      label="Description"
-                      variant="outlined"
-                      type="text"
-                      fullWidth
-                    />
-                    <InputLabel id="demo-mutiple-name-label">State</InputLabel>
-                    <Select
-                      required
-                      id="stateForm"
-                      onChange={handleChangeState}
-                      labelId="demo-mutiple-name-label"
-                      margin="dense"
-                      displayEmpty
-                      variant="outlined"
-                      fullWidth
-                    >
-                      <MenuItem value="In Progress">In Progress</MenuItem>
-                      <MenuItem value="Ready">Ready</MenuItem>
-                      <MenuItem value="Completed">Completed</MenuItem>
-                    </Select>
-                    <TextField
-                      required
-                      autoFocus
-                      margin="dense"
-                      id="date"
-                      label="Date"
-                      type="date"
-                      defaultValue="2020-09-04"
-                      fullWidth
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                    <TextField
-                      required
-                      autoFocus
-                      margin="dense"
-                      id="resp"
-                      label="Responsible"
-                      variant="outlined"
-                      type="text"
-                      fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button onClick={handleAdd} color="primary">
-                    Add
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+            <NewTask fun={handleChangeTasks}/>
             </Container>            
       </main>
     </div>
