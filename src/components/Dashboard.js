@@ -24,6 +24,7 @@ import {red} from '@material-ui/core/colors';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import UserProfile from './UserProfile';
 import NewTask from './NewTask';
+import TaskFilters from './TaskFilters';
 
 const drawerWidth = 240;
 
@@ -103,9 +104,12 @@ export default function Dashboard() {
                 {description:"Facebook Integration",status:"Completed",dueDate:"2020-08-27",responsible:{name:"Juan Navarro",email:"juan.navarro@escuelaing"}}]);
   const classes = useStyles();
   const theme = useTheme();
+  const [openForm, setOpenForm] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = React.useState({name:"Juan David",email:"Juan.navarro@mail.escuelaing.edu.co"}); 
-
+  const [user, setUser] = React.useState({name:"Juan David",email:"Juan.navarro@mail.escuelaing.edu.co"});
+  const [filters, setFilters] = React.useState([]);
+  const [state, setState] = React.useState('');
+  
   const handleChangeUser = (algo) => {
     setUser(algo);
   };
@@ -164,7 +168,7 @@ export default function Dashboard() {
         <div>
             <Card className={classes.root1} variant="outlined">
             <br/>
-            <Avatar src="/static/images/avatar/1.jpg"/>
+            <Avatar />
                 <Typography variant="overline" display="block" color="primary" gutterBottom>
                     {user.name}          
                 </Typography>
@@ -174,10 +178,13 @@ export default function Dashboard() {
                 <UserProfile fun={handleChangeUser}/>                
             </Card>
         </div>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/>
+        <TaskFilters></TaskFilters>
+        <br/><br/><br/><br/><br/><br/>
         <Link to="/Login">
             <Button
                 variant="contained"
+                fullWidth
                 color="primary"
                 className={classes.button}
                 startIcon={<ExitToAppIcon />}
@@ -197,7 +204,8 @@ export default function Dashboard() {
         <div className={classes.drawerHeader} />
             <Container maxWidth="lg" className={classes.containerPaper}>
             <Grid container spacing={2} className={classes.actionSpacer}>
-              {tasks.map(task => (
+              {tasks.map(task => {
+                return (filters.length === 0 || filters.includes(task.dueDate) || filters.includes(task.responsible) || filters.includes(task.status)) ?
                   <Grid key={task} xs={12} sm={6} md={4} lg={5} xl={2} item>
                     <Card className={classes.root1} variant="outlined">
                         <CardContent>
@@ -224,7 +232,9 @@ export default function Dashboard() {
                         </CardActions>
                     </Card>
                   </Grid>
-              ))}
+                  :
+                  null
+              })}
             </Grid>
             <NewTask fun={handleChangeTasks}/>
             </Container>            
